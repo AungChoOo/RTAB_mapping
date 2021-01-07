@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:include filename="$(find my_robot)/urdf/properties_and_inertia.xacro" />
+
+	<xacro:macro name="depth_camera" params="prefix">
+		<link name="depth_camera">
+		<inertial>
+      		<mass value="0.00001" />
+      		<origin xyz="0 0 0" />
+      		<xacro:box_inertia mass="0.00001" l="${depth_camera_length}" w="${depth_camera_width}" h="${depth_camera_height}"/>
+    	</inertial>
+		<visual>
+		    <origin xyz="0 0 0" rpy="0 0 0" />
+		    <geometry>
+      			<box size="${depth_camera_length} ${depth_camera_width} ${depth_camera_height}"/>
+    		</geometry>
+		</visual>
+		<collision>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+      			<box size="${depth_camera_length} ${depth_camera_width} ${depth_camera_height}"/>
+    		</geometry>
+		</collision>
+		</link>
+
+		<joint name="depth_camera_joint" type="fixed">
+      		<origin xyz="${base_length/2+depth_camera_length/2} 0 0" rpy="0 0 0" />
+      		<parent link="${prefix}" />
+      		<child link="depth_camera" />
+    	</joint>
+
+    	<joint name="depth_frame_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="${-pi / 2.0} 0 ${-pi / 2.0}" />
+            <parent link="depth_camera" />
+            <child link="depth_frame" />
+        </joint>
+
+        <link name="depth_frame" />
+
+    	<gazebo reference="depth_camera">
+		  <sensor name="depth_camera" type="depth">
+		  	<always_on>1</always_on>
+		    <update_rate>20</update_rate>
+		    <camera>
+		      <horizontal_fov>${57.0*pi/180.0}</horizontal_fov>
+		      <image>
+		        <width>640</width>
+		        <height>480</height>
+		        <format>R8G8B8</format>
+		      </image>
+		      <clip>
+		        <near>0.05</near>
+		        <far>5</far>
+		      </clip>
+		    </camera>
+		    <plugin name="depth_controller" filename="libgazebo_ros_openni_kinect.so">
+		      <baseline>0.2</baseline>
+		      <alwaysOn>true</alwaysOn>
+		      <updateRate>10.0</updateRate>
+		      <cameraName>robot1</cameraName>
+		      <imageTopicName>/robot1/color/image_raw</imageTopicName>
+		      <cameraInfoTopicName>/robot1/color/camera_info</cameraInfoTopicName>
+		      <depthImageTopicName>/robot1/depth/image_raw</depthImageTopicName>
+		      <depthImageInfoTopicName>/robot1/depth/camera_info</depthImageInfoTopicName>
+		      <pointCloudTopicName>/robot1/depth/points</pointCloudTopicName>
+		      <frameName>depth_frame</frameName>
+		      <pointCloudCutoff>0.5</pointCloudCutoff>
+		      <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+		      <distortionK1>0.00000001</distortionK1>
+		      <distortionK2>0.00000001</distortionK2>
+		      <distortionK3>0.00000001</distortionK3>
+		      <distortionT1>0.00000001</distortionT1>
+		      <distortionT2>0.00000001</distortionT2>
+		      <CxPrime>0</CxPrime>
+		      <Cx>0</Cx>
+		      <Cy>0</Cy>
+		      <focalLength>0</focalLength>
+		      <hackBaseline>0</hackBaseline>
+		    </plugin>
+		  </sensor>
+		</gazebo>
+
+		<gazebo reference="depth_camera">
+			<material>Gazebo/Orange</material>
+		</gazebo>
+
+	</xacro:macro>
+
+</robot>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find my_robot)/urdf/properties_and_inertia.xacro" />
+
+  <xacro:macro name="wheel" params="prefix *joint_pose">
+
+    <link name="${prefix}_wheel">
+      <inertial>
+          <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+          <mass value="1" />
+          <xacro:cylinder_inertia mass="1" r="${wheel_radius}" l="${wheel_thickness}" />
+      </inertial>
+      <visual>
+          <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+          <geometry>
+            <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+          </geometry>
+      </visual>
+      <collision>
+          <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+          <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+          </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${prefix}_wheel">
+      <mu1 value="1.0"/>
+      <mu2 value="1.0"/>
+      <kp value="10000.0" />
+      <kd value="1.0" />
+      <!-- <fdir1 value="0 0 0"/> -->
+      <slip1>0.5</slip1>
+      <slip2>0</slip2>
+    </gazebo>
+
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <parent link="base_link" />
+      <child link="${prefix}_wheel" />
+      <xacro:insert_block name="joint_pose"/>
+      <axis xyz="0 1 0" rpy="0 0 0" />
+    </joint>
+
+    <transmission name="${prefix}_wheel_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${prefix}_wheel_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${prefix}_wheel_joint">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+
+    <gazebo reference="${prefix}_wheel">
+      <material>Gazebo/Red</material>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

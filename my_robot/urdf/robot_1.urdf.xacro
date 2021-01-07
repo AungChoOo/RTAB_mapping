@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<robot name="robot_1" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="laser_enabled" default="false" />
+  <xacro:arg name="camera_enabled" default="false" />
+  <xacro:arg name="imu_enabled" default="false" />
+	<xacro:arg name="robot_namespace" default="/" />
+
+	<xacro:include filename="$(find my_robot)/urdf/laser.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot)/urdf/3d_camera.xacro"/>
+  <xacro:include filename="$(find my_robot)/urdf/imu.xacro"/>
+  <xacro:include filename="$(find my_robot)/urdf/wheel.xacro"/>
+  <xacro:include filename="$(find my_robot)/urdf/properties_and_inertia.xacro"/>
+
+  <link name="base_footprint"/>
+
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child link="base_link" />
+  </joint>
+
+	<link name="base_link">
+  	<visual>
+    		<origin xyz="0 0 0" rpy="0 0 0" />
+    		<geometry>
+      		<box size="${base_length} ${base_width} ${base_height}"/>
+    		</geometry>
+  	</visual>
+  	<collision>
+   		<origin xyz="0 0 0" rpy="0 0 0" />
+    		<geometry>
+      		<box size="${base_length} ${base_width} ${base_height}"/>
+    		</geometry>
+  	</collision>
+    <inertial>
+      <mass value="1" />
+      <origin xyz="0 0 0" />
+      <xacro:box_inertia mass="1" l="${base_length}" w="${base_width}" h="${base_height}"/>
+    </inertial>
+	</link>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <!-- laser -->
+	<xacro:if value="$(arg laser_enabled)">
+    <xacro:laser prefix="base_link"/>
+  </xacro:if>
+
+  <xacro:if value="$(arg camera_enabled)">
+    <xacro:depth_camera prefix="base_link"/>
+  </xacro:if>
+
+  <xacro:if value="$(arg imu_enabled)">
+    <xacro:imu_sensor prefix="base_link"/>
+  </xacro:if>
+
+  <!-- <xacro:wheel prefix="right">
+    <origin xyz="0 -${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
+  </xacro:wheel>
+  <xacro:wheel prefix="left">
+    <origin xyz="0 ${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
+  </xacro:wheel> -->
+
+  <xacro:wheel prefix="front_right">
+    <origin xyz="${base_length/4} -${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
+  </xacro:wheel>
+  <xacro:wheel prefix="front_left">
+    <origin xyz="${base_length/4} ${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
+  </xacro:wheel>
+  <xacro:wheel prefix="back_right">
+    <origin xyz="${-base_length/4} -${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
+  </xacro:wheel>
+  <xacro:wheel prefix="back_left">
+    <origin xyz="${-base_length/4} ${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
+  </xacro:wheel>
+
+  <!-- <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo> -->
+
+  <!-- <gazebo>
+    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>20</updateRate>
+      <leftJoint>left_wheel_joint</leftJoint>
+      <rightJoint>right_wheel_joint</rightJoint>
+      <wheelSeparation>${base_width+wheel_thickness}</wheelSeparation>
+      <wheelDiameter>${wheel_radius*2}</wheelDiameter>
+      <wheelTorque>20</wheelTorque>
+      <wheelAcceleration>1.0</wheelAcceleration>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+  </gazebo> -->
+
+  <!-- <gazebo>
+    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+      <updateRate>10.0</updateRate>
+      <robotNamespace>/</robotNamespace>
+      <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+      <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+      <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+      <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+      <wheelSeparation>${base_width+wheel_thickness}</wheelSeparation>
+      <wheelDiameter>${wheel_radius*2}</wheelDiameter>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <torque>20</torque>
+      <MaxForce>5.0</MaxForce>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <broadcastTF>true</broadcastTF>
+    </plugin>
+  </gazebo> -->
+
+  <gazebo>
+    <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>20.0</odometryRate>
+      <robotNamespace>/</robotNamespace>
+      <enableYAxis>false</enableYAxis>
+      <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+      <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+      <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+      <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+      <wheelSeparation>${base_width+wheel_thickness}</wheelSeparation>
+      <wheelDiameter>${wheel_radius*2}</wheelDiameter>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+</robot>

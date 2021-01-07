@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:include filename="$(find my_robot)/urdf/properties_and_inertia.xacro" />
+
+	<xacro:macro name="imu_sensor" params="prefix">
+		<link name="imu_sensor">
+		<inertial>
+      		<mass value="0.00001" />
+      		<origin xyz="0 0 0" />
+      		<xacro:box_inertia mass="0.00001" l="${imu_length}" w="${imu_width}" h="${imu_height}"/>
+    	</inertial>
+		<visual>
+		    <origin xyz="0 0 0" rpy="0 0 0" />
+		    <geometry>
+      			<box size="${imu_length} ${imu_width} ${imu_height}"/>
+    		</geometry>
+		</visual>
+		<collision>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+      			<box size="${imu_length} ${imu_width} ${imu_height}"/>
+    		</geometry>
+		</collision>
+		</link>
+
+		<joint name="imu_sensor_joint" type="fixed">
+      		<origin xyz="0 0 ${base_height/2+imu_height/2}" rpy="0 0 0" />
+      		<parent link="${prefix}" />
+      		<child link="imu_sensor" />
+    	</joint>
+
+    	<gazebo reference="imu_sensor">
+		    <gravity>true</gravity>
+		    <sensor name="imu_sensor" type="imu">
+		    <always_on>true</always_on>
+		    <update_rate>100</update_rate>
+		    <visualize>true</visualize>
+		    <topic>__default_topic__</topic>
+		    <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+		        <topicName>imu</topicName>
+		        <bodyName>imu_sensor</bodyName>
+		        <updateRateHZ>10.0</updateRateHZ>
+		        <gaussianNoise>0.0</gaussianNoise>
+		        <xyzOffset>0 0 0</xyzOffset>
+		        <rpyOffset>0 0 0</rpyOffset>
+		        <frameName>imu_sensor</frameName>
+		        <initialOrientationAsReference>false</initialOrientationAsReference>
+		    </plugin>
+		    <pose>0 0 0 0 0 0</pose>
+		    </sensor>
+		</gazebo>
+
+		<gazebo reference="imu_sensor">
+			<material>Gazebo/Green</material>
+		</gazebo>
+
+	</xacro:macro>
+
+</robot>
