@@ -26,13 +26,13 @@
 		</link>
 
 		<joint name="depth_camera_joint" type="fixed">
-      		<origin xyz="${base_length/2+depth_camera_length/2} 0 0" rpy="0 0 0" />
+      		<origin xyz="${base_length/2+depth_camera_length/2} 0 ${base_height/2-depth_camera_height/2}" rpy="0 0 0" />
       		<parent link="${prefix}" />
       		<child link="depth_camera" />
     	</joint>
 
     	<joint name="depth_frame_joint" type="fixed">
-            <origin xyz="0 0 0" rpy="${-pi / 2.0} 0 ${-pi / 2.0}" />
+            <origin xyz="${depth_camera_length/2} 0 0" rpy="${-pi / 2.0} 0 ${-pi / 2.0}" />
             <parent link="depth_camera" />
             <child link="depth_frame" />
         </joint>
@@ -40,19 +40,20 @@
         <link name="depth_frame" />
 
     	<gazebo reference="depth_camera">
+    		<material>Gazebo/Orange</material>
 		  <sensor name="depth_camera" type="depth">
 		  	<always_on>1</always_on>
 		    <update_rate>20</update_rate>
 		    <camera>
 		      <horizontal_fov>${57.0*pi/180.0}</horizontal_fov>
 		      <image>
-		        <width>640</width>
-		        <height>480</height>
+		        <width>1920</width>
+		        <height>1080</height>
 		        <format>R8G8B8</format>
 		      </image>
 		      <clip>
-		        <near>0.05</near>
-		        <far>5</far>
+		        <near>0.03</near>
+		        <far>50</far>
 		      </clip>
 		    </camera>
 		    <plugin name="depth_controller" filename="libgazebo_ros_openni_kinect.so">
@@ -60,8 +61,8 @@
 		      <alwaysOn>true</alwaysOn>
 		      <updateRate>10.0</updateRate>
 		      <cameraName>robot1</cameraName>
-		      <imageTopicName>/robot1/color/image_raw</imageTopicName>
-		      <cameraInfoTopicName>/robot1/color/camera_info</cameraInfoTopicName>
+		      <imageTopicName>/robot1/rgb/image_raw</imageTopicName>
+		      <cameraInfoTopicName>/robot1/rgb/camera_info</cameraInfoTopicName>
 		      <depthImageTopicName>/robot1/depth/image_raw</depthImageTopicName>
 		      <depthImageInfoTopicName>/robot1/depth/camera_info</depthImageInfoTopicName>
 		      <pointCloudTopicName>/robot1/depth/points</pointCloudTopicName>
@@ -80,10 +81,6 @@
 		      <hackBaseline>0</hackBaseline>
 		    </plugin>
 		  </sensor>
-		</gazebo>
-
-		<gazebo reference="depth_camera">
-			<material>Gazebo/Orange</material>
 		</gazebo>
 
 	</xacro:macro>

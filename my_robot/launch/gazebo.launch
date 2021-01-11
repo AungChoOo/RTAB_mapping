@@ -9,14 +9,6 @@
 	    <arg name="debug" value="false"/>
 	</include>
 
-	<!-- <include file="$(find gazebo_ros)/launch/empty_world.launch">
-	    <arg name="paused" value="false"/>
-	    <arg name="use_sim_time" value="true"/>
-	    <arg name="gui" value="true"/>
-	    <arg name="headless" value="false"/>
-	    <arg name="debug" value="false"/>
-	</include> -->
-
 	<arg name="robot_namespace" default="/"/>
 	<arg name="laser_enabled" value="true"/>
 	<arg name="camera_enabled" value="true"/>
@@ -28,10 +20,10 @@
         args="robot_1_joint_publisher robot_1_velocity_controller"/> -->
 
     <!-- Convert any cmd_vel topic to cmd_vel -->
-	<!-- <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+	<node pkg="twist_mux" type="twist_mux" name="twist_mux">
 		<rosparam command="load" file="$(find my_robot)/config/twist_mux.yaml" />
 		<remap from="cmd_vel_out" to="robot_1_velocity_controller/cmd_vel"/>
-	</node> -->
+	</node>
 
 	<!-- Robot Parameter -->
 	<param name="robot_description" command="$(find xacro)/xacro '$(find my_robot)/urdf/robot_1.urdf.xacro' 
@@ -42,7 +34,7 @@
 
 	<!-- <param name="robot_description" command="$(find xacro)/xacro '$(find fouliex_bot)/urdf/fouliex_bot.xacro'" /> -->
 
-	<!-- <param name="robot_description" command="$(find xacro)/xacro '$(find turtlebot3_description)/urdf/turtlebot3_waffle.urdf.xacro" /> -->
+	<!-- <param name="robot_description" command="$(find xacro)/xacro inorder $(find turtlebot3_description)/urdf/turtlebot3_waffle.urdf.xacro" /> -->
 
   	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     	<param name="use_gui" value="false"/>

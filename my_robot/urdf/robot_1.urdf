@@ -4,15 +4,18 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="robot_1">
-  <link name="base_footprint"/>
+
+<!--   <link name="base_footprint"/>
+
   <joint name="base_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0.1"/>
     <parent link="base_footprint"/>
     <child link="base_link"/>
-  </joint>
+  </joint> -->
+
   <link name="base_link">
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0.01"/>
       <geometry>
         <box size="0.5 0.25 0.1"/>
       </geometry>
@@ -29,6 +32,7 @@
       <inertia ixx="0.00604166666667" ixy="0" ixz="0" iyy="0.0216666666667" iyz="0" izz="0.0260416666667"/>
     </inertial>
   </link>
+
   <gazebo reference="base_link">
     <material>Gazebo/Black</material>
   </gazebo>
@@ -60,7 +64,7 @@
   <gazebo reference="front_right_wheel">
     <mu1 value="1.0"/>
     <mu2 value="1.0"/>
-    <kp value="10000.0"/>
+    <kp value="100000.0"/>
     <kd value="1.0"/>
     <!-- <fdir1 value="0 0 0"/> -->
     <slip1>0.5</slip1>
@@ -72,7 +76,7 @@
     <origin rpy="0 0 0" xyz="0.125 -0.15 0"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
   </joint>
-  <transmission name="front_right_wheel_trans" type="SimpleTransmission">
+<!--   <transmission name="front_right_wheel_trans" type="SimpleTransmission">
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="front_right_wheel_motor">
       <mechanicalReduction>1</mechanicalReduction>
@@ -80,10 +84,11 @@
     <joint name="front_right_wheel_joint">
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
-  </transmission>
+  </transmission> -->
   <gazebo reference="front_right_wheel">
     <material>Gazebo/Red</material>
   </gazebo>
+
   <link name="front_left_wheel">
     <inertial>
       <origin rpy="1.570795 0 0" xyz="0 0 0"/>
@@ -103,10 +108,11 @@
       </geometry>
     </collision>
   </link>
+
   <gazebo reference="front_left_wheel">
     <mu1 value="1.0"/>
     <mu2 value="1.0"/>
-    <kp value="10000.0"/>
+    <kp value="100000.0"/>
     <kd value="1.0"/>
     <!-- <fdir1 value="0 0 0"/> -->
     <slip1>0.5</slip1>
@@ -118,7 +124,7 @@
     <origin rpy="0 0 0" xyz="0.125 0.15 0"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
   </joint>
-  <transmission name="front_left_wheel_trans" type="SimpleTransmission">
+<!--   <transmission name="front_left_wheel_trans" type="SimpleTransmission">
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="front_left_wheel_motor">
       <mechanicalReduction>1</mechanicalReduction>
@@ -126,10 +132,11 @@
     <joint name="front_left_wheel_joint">
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
-  </transmission>
+  </transmission> -->
   <gazebo reference="front_left_wheel">
     <material>Gazebo/Red</material>
   </gazebo>
+
   <link name="back_right_wheel">
     <inertial>
       <origin rpy="1.570795 0 0" xyz="0 0 0"/>
@@ -149,10 +156,11 @@
       </geometry>
     </collision>
   </link>
+
   <gazebo reference="back_right_wheel">
     <mu1 value="1.0"/>
     <mu2 value="1.0"/>
-    <kp value="10000.0"/>
+    <kp value="100000.0"/>
     <kd value="1.0"/>
     <!-- <fdir1 value="0 0 0"/> -->
     <slip1>0.5</slip1>
@@ -164,7 +172,7 @@
     <origin rpy="0 0 0" xyz="-0.125 -0.15 0"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
   </joint>
-  <transmission name="back_right_wheel_trans" type="SimpleTransmission">
+<!--   <transmission name="back_right_wheel_trans" type="SimpleTransmission">
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="back_right_wheel_motor">
       <mechanicalReduction>1</mechanicalReduction>
@@ -172,7 +180,7 @@
     <joint name="back_right_wheel_joint">
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
-  </transmission>
+  </transmission> -->
   <gazebo reference="back_right_wheel">
     <material>Gazebo/Red</material>
   </gazebo>
@@ -210,7 +218,7 @@
     <origin rpy="0 0 0" xyz="-0.125 0.15 0"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
   </joint>
-  <transmission name="back_left_wheel_trans" type="SimpleTransmission">
+  <!-- <transmission name="back_left_wheel_trans" type="SimpleTransmission">
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="back_left_wheel_motor">
       <mechanicalReduction>1</mechanicalReduction>
@@ -218,7 +226,7 @@
     <joint name="back_left_wheel_joint">
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
-  </transmission>
+  </transmission> -->
   <gazebo reference="back_left_wheel">
     <material>Gazebo/Red</material>
   </gazebo>
@@ -262,7 +270,7 @@
       <broadcastTF>true</broadcastTF>
     </plugin>
   </gazebo> -->
-  <gazebo>
+<!--   <gazebo>
     <plugin filename="libgazebo_ros_planar_move.so" name="object_controller">
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
@@ -278,6 +286,23 @@
       <wheelDiameter>0.2</wheelDiameter>
       <robotBaseFrame>base_footprint</robotBaseFrame>
     </plugin>
-  </gazebo>
+  </gazebo> -->
+
+  <gazebo>
+  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+    <updateRate>100.0</updateRate>
+    <robotNamespace>/</robotNamespace>
+    <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+    <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+    <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+    <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+    <wheelSeparation>0.3</wheelSeparation>
+    <wheelDiameter>0.2</wheelDiameter>
+    <robotBaseFrame>base_link</robotBaseFrame>
+    <torque>500</torque>
+    <topicName>cmd_vel</topicName>
+    <broadcastTF>true</broadcastTF>
+  </plugin>
+</gazebo>
 </robot>
 

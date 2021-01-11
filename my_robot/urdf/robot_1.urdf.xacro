@@ -44,26 +44,22 @@
     <material>Gazebo/Black</material>
   </gazebo>
 
-  <!-- laser -->
+  <!-- Laser -->
 	<xacro:if value="$(arg laser_enabled)">
     <xacro:laser prefix="base_link"/>
   </xacro:if>
 
+  <!-- 3D Camera -->
   <xacro:if value="$(arg camera_enabled)">
     <xacro:depth_camera prefix="base_link"/>
   </xacro:if>
 
+  <!-- IMU sensor -->
   <xacro:if value="$(arg imu_enabled)">
     <xacro:imu_sensor prefix="base_link"/>
   </xacro:if>
 
-  <!-- <xacro:wheel prefix="right">
-    <origin xyz="0 -${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
-  </xacro:wheel>
-  <xacro:wheel prefix="left">
-    <origin xyz="0 ${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
-  </xacro:wheel> -->
-
+  <!-- Wheels -->
   <xacro:wheel prefix="front_right">
     <origin xyz="${base_length/4} -${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
   </xacro:wheel>
@@ -77,6 +73,7 @@
     <origin xyz="${-base_length/4} ${base_width/2+wheel_thickness/2} 0" rpy="0 0 0" />
   </xacro:wheel>
 
+  <!-- Plugin -->
   <!-- <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/</robotNamespace>
@@ -84,38 +81,18 @@
   </gazebo> -->
 
   <!-- <gazebo>
-    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
-      <alwaysOn>true</alwaysOn>
-      <updateRate>20</updateRate>
-      <leftJoint>left_wheel_joint</leftJoint>
-      <rightJoint>right_wheel_joint</rightJoint>
-      <wheelSeparation>${base_width+wheel_thickness}</wheelSeparation>
-      <wheelDiameter>${wheel_radius*2}</wheelDiameter>
-      <wheelTorque>20</wheelTorque>
-      <wheelAcceleration>1.0</wheelAcceleration>
-      <commandTopic>cmd_vel</commandTopic>
-      <odometryTopic>odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
-      <robotBaseFrame>base_link</robotBaseFrame>
-    </plugin>
-  </gazebo> -->
-
-  <!-- <gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
-      <updateRate>10.0</updateRate>
+      <updateRate>100.0</updateRate>
       <robotNamespace>/</robotNamespace>
       <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
       <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
       <leftRearJoint>back_left_wheel_joint</leftRearJoint>
       <rightRearJoint>back_right_wheel_joint</rightRearJoint>
-      <wheelSeparation>${base_width+wheel_thickness}</wheelSeparation>
-      <wheelDiameter>${wheel_radius*2}</wheelDiameter>
-      <robotBaseFrame>base_footprint</robotBaseFrame>
-      <torque>20</torque>
-      <MaxForce>5.0</MaxForce>
-      <commandTopic>cmd_vel</commandTopic>
-      <odometryTopic>odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
+      <wheelSeparation>0.3</wheelSeparation>
+      <wheelDiameter>0.2</wheelDiameter>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <torque>500</torque>
+      <topicName>cmd_vel</topicName>
       <broadcastTF>true</broadcastTF>
     </plugin>
   </gazebo> -->
