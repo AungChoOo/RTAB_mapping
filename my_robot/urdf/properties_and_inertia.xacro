@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<xacro:property name="pi" value="3.14159"/>
-	<xacro:property name="scale" value="1"/>
+	<xacro:property name="scale" value="1.5"/>
 
   	<xacro:property name="base_length" value="${scale*0.5}" />
   	<xacro:property name="base_width" value="${scale*0.25}" />

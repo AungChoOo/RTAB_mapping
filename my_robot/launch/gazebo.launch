@@ -20,10 +20,10 @@
         args="robot_1_joint_publisher robot_1_velocity_controller"/> -->
 
     <!-- Convert any cmd_vel topic to cmd_vel -->
-	<node pkg="twist_mux" type="twist_mux" name="twist_mux">
+	<!-- <node pkg="twist_mux" type="twist_mux" name="twist_mux">
 		<rosparam command="load" file="$(find my_robot)/config/twist_mux.yaml" />
 		<remap from="cmd_vel_out" to="robot_1_velocity_controller/cmd_vel"/>
-	</node>
+	</node> -->
 
 	<!-- Robot Parameter -->
 	<param name="robot_description" command="$(find xacro)/xacro '$(find my_robot)/urdf/robot_1.urdf.xacro' 
@@ -31,10 +31,6 @@
 		laser_enabled:=$(arg laser_enabled)
 		camera_enabled:=$(arg camera_enabled)
 		imu_enabled:=$(arg imu_enabled)" />
-
-	<!-- <param name="robot_description" command="$(find xacro)/xacro '$(find fouliex_bot)/urdf/fouliex_bot.xacro'" /> -->
-
-	<!-- <param name="robot_description" command="$(find xacro)/xacro inorder $(find turtlebot3_description)/urdf/turtlebot3_waffle.urdf.xacro" /> -->
 
   	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     	<param name="use_gui" value="false"/>

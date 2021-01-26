@@ -1,13 +1,20 @@
 <launch>
       <!-- Arguments for launch file with defaults provided -->
   <arg name="database_path"     default="~/.ros/rtabmap.db"/>
-  <arg name="rtabmapviz" default="false"/>
+  <arg name="rtabmapviz"   default="false"/>
   <arg name="localization" default="false"/>
+
+  <arg name="base_frame" default="base_footprint"/>
 
   <arg name="rgb_topic"   default="/robot1/rgb/image_raw"/>
   <arg name="depth_topic" default="/robot1/depth/image_raw"/>
   <arg name="laser_topic" default="/robot1/scan"/>
   <arg name="camera_info_topic" default="/robot1/rgb/camera_info"/>
+
+  <!-- <arg name="rgb_topic"   default="/realsense/color/image_raw"/>
+  <arg name="depth_topic" default="/realsense/depth/image_rect_raw"/>
+  <arg name="laser_topic" default="/scan"/>
+  <arg name="camera_info_topic" default="/realsense/color/camera_info"/> -->
 
   <arg     if="$(arg localization)" name="rtabmap_args" default=""/>
   <arg unless="$(arg localization)" name="rtabmap_args" default="-d"/>
@@ -18,6 +25,7 @@
 
   <group ns="rtabmap">
     <node pkg="rtabmap_ros" type="rgbd_sync" name="rgbd_sync" output="screen">
+      <param name="frame_id"            type="string" value="base_footprint"/>
       <remap from="rgb/image"         to="$(arg rgb_topic)"/>
       <remap from="depth/image"       to="$(arg depth_topic)"/>
       <remap from="rgb/camera_info"   to="$(arg camera_info_topic)"/>
@@ -26,7 +34,7 @@
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="$(arg rtabmap_args)">
     <!-- Basic RTAB-Map Parameters -->
       <param name="database_path"       type="string" value="$(arg database_path)"/>
-      <param name="frame_id"            type="string" value="base_footprint"/>
+      <param name="frame_id"            type="string" value="$(arg base_frame)"/>
       <param name="odom_frame_id"       type="string" value="odom"/>
       <param name="subscribe_rgb"       type="bool"   value="false"/>
       <param name="subscribe_depth"     type="bool"   value="false"/>
@@ -47,13 +55,15 @@
       <remap from="grid_map" to="/map"/>
 
       <!-- RTAB-Map's parameters -->
-      <param name="Reg/Strategy"                 type="string" value="1"/>
-      <param name="Reg/Force3DoF"                type="string" value="true"/>
-      <param name="GridGlobal/MinSize"           type="string" value="20"/>
+      <param name="Reg/Strategy"                type="string" value="1"/>
+      <param name="Reg/Force3DoF"               type="string" value="true"/>
+      <param name="Optimizer/Slam2D"            type="string" value="true"/>
+      <param name="GridGlobal/MinSize"          type="string" value="20"/>
       <!-- Update map only if the robot is moving -->
-      <param name="RGBD/AngularUpdate"           type="string" value="0.1"/> 
+      <param name="RGBD/AngularUpdate"          type="string" value="0.1"/> 
       <!-- Update map only if the robot is moving -->  
-      <param name="RGBD/LinearUpdate"            type="string" value="0.1"/>   
+      <param name="RGBD/LinearUpdate"           type="string" value="0.1"/>
+
       <!-- Set to false to avoid saving data when robot is not moving -->
       <param     if="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="false"/>
       <param unless="$(arg localization)" name="Mem/IncrementalMemory" type="string" value="true"/>
