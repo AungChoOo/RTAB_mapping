@@ -6,23 +6,27 @@
 
   <arg name="base_frame" default="base_footprint"/>
 
-  <arg name="rgb_topic"   default="/robot1/rgb/image_raw"/>
+  <!-- <arg name="rgb_topic"   default="/robot1/rgb/image_raw"/>
   <arg name="depth_topic" default="/robot1/depth/image_raw"/>
   <arg name="laser_topic" default="/robot1/scan"/>
-  <arg name="camera_info_topic" default="/robot1/rgb/camera_info"/>
+  <arg name="camera_info_topic" default="/robot1/rgb/camera_info"/> -->
 
-  <!-- <arg name="rgb_topic"   default="/realsense/color/image_raw"/>
-  <arg name="depth_topic" default="/realsense/depth/image_rect_raw"/>
+  <arg name="rgb_topic"   default="/camera/rgb/image_raw"/>
+  <arg name="depth_topic" default="/camera/depth/image_raw"/>
   <arg name="laser_topic" default="/scan"/>
-  <arg name="camera_info_topic" default="/realsense/color/camera_info"/> -->
+  <arg name="camera_info_topic" default="/camera/rgb/camera_info"/>
 
   <arg     if="$(arg localization)" name="rtabmap_args" default=""/>
   <arg unless="$(arg localization)" name="rtabmap_args" default="-d"/>
 
-  <include file="$(find my_robot)/launch/move_base.launch">
+  <!-- <include file="$(find my_robot)/launch/move_base.launch">
+    <arg name="move_forward_only" value="false"/>
+  </include> -->
+
+  <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
     <arg name="move_forward_only" value="false"/>
   </include>
-
+  
   <group ns="rtabmap">
     <node pkg="rtabmap_ros" type="rgbd_sync" name="rgbd_sync" output="screen">
       <param name="frame_id"            type="string" value="base_footprint"/>
