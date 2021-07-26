@@ -19,13 +19,13 @@
   <arg     if="$(arg localization)" name="rtabmap_args" default=""/>
   <arg unless="$(arg localization)" name="rtabmap_args" default="-d"/>
 
-  <!-- <include file="$(find my_robot)/launch/move_base.launch">
-    <arg name="move_forward_only" value="false"/>
-  </include> -->
-
-  <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+  <include file="$(find my_robot)/launch/move_base.launch">
     <arg name="move_forward_only" value="false"/>
   </include>
+
+ <!--  <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+    <arg name="move_forward_only" value="false"/>
+  </include> -->
   
   <group ns="rtabmap">
     <node pkg="rtabmap_ros" type="rgbd_sync" name="rgbd_sync" output="screen">
